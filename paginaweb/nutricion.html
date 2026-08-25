@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrición - Mi Gym</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Nutrición</h1>
+    <p>Calcula tus macros y controla tu alimentación</p>
+</header>
+
+<nav>
+    <a href="index.html">Inicio</a>
+    <a href="servicios.html">Servicios</a>
+    <a href="musculatura.php">Musculación</a>
+    <a href="nutricion.html">Nutrición</a>
+    <a href="index.html#contacto">Contacto</a>
+</nav>
+
+<section>
+
+    <h2>Calculadora de alimentos</h2>
+
+    <form onsubmit="event.preventDefault(); calcular();">
+        <label for="alimento">Alimento</label><br>
+        <select id="alimento" required>
+            <option value="">-- Seleccione un alimento --</option>
+            <option value="Pechuga de pollo">Pechuga de pollo</option>
+            <option value="Arroz">Arroz</option>
+            <option value="Avena">Avena</option>
+            <option value="Huevo">Huevo</option>
+            <option value="Plátano">Plátano</option>
+        </select>
+
+        <br><br>
+
+        <label for="gramos">Cantidad (gramos)</label><br>
+        <input type="number" id="gramos" min="1" placeholder="Ej: 150" required>
+
+        <br><br>
+
+        <button type="submit">Calcular</button>
+    </form>
+
+    <h2>Información nutricional calculada</h2>
+
+    <div class="estadisticas">
+        <div class="tarjeta">
+            <h3>🔥 Calorías</h3>
+            <p><span id="calorias">0</span> <small style="font-size: 16px; color: #555;">kcal</small></p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>🥩 Proteínas</h3>
+            <p><span id="proteinas">0</span> <small style="font-size: 16px; color: #555;">g</small></p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>🍚 Carbohidratos</h3>
+            <p><span id="carbohidratos">0</span> <small style="font-size: 16px; color: #555;">g</small></p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>🥑 Grasas</h3>
+            <p><span id="grasas">0</span> <small style="font-size: 16px; color: #555;">g</small></p>
+        </div>
+    </div>
+
+</section>
+
+<footer>
+    <p style="text-align: center; padding: 20px; color: #777;">© 2026 Mi Gym</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
