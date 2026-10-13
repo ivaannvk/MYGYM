@@ -346,6 +346,35 @@ $linkEmail = "mailto:" . urlencode($dieta['cliente_email']) . "?subject=" . urle
             </div>
         </div>
 
+        <!-- TOTALES GLOBALES DEL PLAN / OPCIÓN SELECCIONADA (ARRIBA DEL TODO) -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color: #065f46; margin: 0; font-size: 19px; display: flex; align-items: center; gap: 8px;">
+                    📊 Balance Nutricional Total: <span id="label_dia_totales" style="color: #047857; font-weight: bold;"><?php echo htmlspecialchars($dias[0]['nombre_dia'] ?? 'Menú Principal'); ?></span>
+                </h3>
+                <span style="font-size: 13px; color: #64748b; background: #e2e8f0; padding: 4px 10px; border-radius: 20px; font-weight: 500;">Totales acumulados</span>
+            </div>
+
+            <div class="banner-macros" style="margin-bottom: 0;">
+                <div class="macro-card">
+                    <h4>🔥 Calorías Totales</h4>
+                    <p id="top_total_kcal"><?php echo round($dias[0]['total_calorias'] ?? $dieta['total_calorias']); ?> <small style="font-size: 14px;">kcal</small></p>
+                </div>
+                <div class="macro-card">
+                    <h4>🥩 Proteínas Totales</h4>
+                    <p id="top_total_prot"><?php echo round($dias[0]['total_proteinas'] ?? $dieta['total_proteinas'], 1); ?> <small style="font-size: 14px;">g</small></p>
+                </div>
+                <div class="macro-card">
+                    <h4>🍚 Carbohidratos Totales (HC)</h4>
+                    <p id="top_total_carb"><?php echo round($dias[0]['total_carbos'] ?? $dieta['total_carbos'], 1); ?> <small style="font-size: 14px;">g</small></p>
+                </div>
+                <div class="macro-card">
+                    <h4>🥑 Grasas Totales</h4>
+                    <p id="top_total_gras"><?php echo round($dias[0]['total_grasas'] ?? $dieta['total_grasas'], 1); ?> <small style="font-size: 14px;">g</small></p>
+                </div>
+            </div>
+        </div>
+
         <!-- SELECTOR INTERACTIVO DE DÍAS / OPCIONES -->
         <h3 style="color: #1e3a8a; margin-bottom: 12px;">📅 Opciones de Menú Disponibles:</h3>
         <div class="selector-dias-view">
@@ -459,6 +488,8 @@ $linkEmail = "mailto:" . urlencode($dieta['cliente_email']) . "?subject=" . urle
 </footer>
 
 <script>
+const diasData = <?php echo json_encode($dias); ?>;
+
 function cambiarDiaVista(index) {
     let allBtns = document.querySelectorAll(".btn-dia-view");
     allBtns.forEach(b => b.classList.remove("activo"));
@@ -472,6 +503,22 @@ function cambiarDiaVista(index) {
     if (targetBtn && targetContent) {
         targetBtn.classList.add("activo");
         targetContent.classList.add("activo");
+    }
+
+    if (diasData && diasData[index]) {
+        let d = diasData[index];
+        let lbl = document.getElementById("label_dia_totales");
+        if (lbl) lbl.textContent = d.nombre_dia;
+        
+        let kSpan = document.getElementById("top_total_kcal");
+        let pSpan = document.getElementById("top_total_prot");
+        let cSpan = document.getElementById("top_total_carb");
+        let gSpan = document.getElementById("top_total_gras");
+
+        if (kSpan) kSpan.innerHTML = Math.round(d.total_calorias) + ' <small style="font-size: 14px;">kcal</small>';
+        if (pSpan) pSpan.innerHTML = parseFloat(d.total_proteinas).toFixed(1) + ' <small style="font-size: 14px;">g</small>';
+        if (cSpan) cSpan.innerHTML = parseFloat(d.total_carbos).toFixed(1) + ' <small style="font-size: 14px;">g</small>';
+        if (gSpan) gSpan.innerHTML = parseFloat(d.total_grasas).toFixed(1) + ' <small style="font-size: 14px;">g</small>';
     }
 }
 </script>

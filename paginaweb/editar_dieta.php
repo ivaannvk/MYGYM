@@ -262,6 +262,16 @@ function agregarNuevoDia(nombreDia = null, comidasInit = null) {
                     </tr>
                 </thead>
                 <tbody id="tbody_comidas_dia_${diaIndex}"></tbody>
+                <tfoot>
+                    <tr style="background: #f0fdf4; font-weight: bold; border-top: 2px solid #10b981;">
+                        <td colspan="3" style="text-align: right; color: #166534; font-size: 13px;">SUMA TOTAL DE ESTE MENÚ:</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootKcal_${diaIndex}">0</span> kcal</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootProt_${diaIndex}">0</span> g</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootCarb_${diaIndex}">0</span> g</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootGras_${diaIndex}">0</span> g</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     `;
@@ -433,6 +443,16 @@ function calcularTotalesDia(diaIndex) {
     if (pSpan) pSpan.textContent = totalProt.toFixed(1);
     if (cSpan) cSpan.textContent = totalCarb.toFixed(1);
     if (gSpan) gSpan.textContent = totalGras.toFixed(1);
+
+    let fk = document.getElementById(`tfootKcal_${diaIndex}`);
+    let fp = document.getElementById(`tfootProt_${diaIndex}`);
+    let fc = document.getElementById(`tfootCarb_${diaIndex}`);
+    let fg = document.getElementById(`tfootGras_${diaIndex}`);
+
+    if (fk) fk.textContent = Math.round(totalKcal);
+    if (fp) fp.textContent = totalProt.toFixed(1);
+    if (fc) fc.textContent = totalCarb.toFixed(1);
+    if (fg) fg.textContent = totalGras.toFixed(1);
 }
 
 window.onload = function() {

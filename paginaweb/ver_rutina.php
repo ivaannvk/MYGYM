@@ -66,6 +66,15 @@ foreach ($ejercicios as $ej) {
     } else {
         $textoWA .= "   • " . $ej['series'] . " series x " . $ej['repeticiones'] . " reps (" . $ej['peso'] . "kg)\n";
     }
+
+    if (!empty($ej['video_url'])) {
+        $vUrl = $ej['video_url'];
+        if (strpos($vUrl, 'http') === false) {
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+            $vUrl = "http://" . $host . "/paginaweb/" . ltrim($vUrl, '/');
+        }
+        $textoWA .= "   🎥 *Video:* " . $vUrl . "\n";
+    }
     $textoWA .= "\n";
     $num++;
 }
@@ -186,11 +195,38 @@ $linkEmail = "mailto:" . urlencode($rutina['cliente_email']) . "?subject=" . url
             gap: 8px;
             transition: .2s;
         }
-        .btn-print:hover { background: #334155; }
+        .btn-video-badge {
+            background: #e11d48;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: .2s;
+        }
+        .btn-video-badge:hover {
+            background: #be123c;
+            transform: scale(1.05);
+        }
+        .video-ejercicio-box {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            border-radius: 12px;
+        }
 
         @media print {
-            header, nav, footer, .acciones-envio, .btn-volver {
+            header, nav, footer, .acciones-envio, .btn-volver, .video-ejercicio-box {
                 display: none !important;
+            }
+            .video-pdf-print {
+                display: block !important;
             }
             body {
                 background: white;
@@ -260,7 +296,14 @@ $linkEmail = "mailto:" . urlencode($rutina['cliente_email']) . "?subject=" . url
             <?php $i = 1; foreach ($ejercicios as $ej): ?>
                 <div class="ejercicio-card-view">
                     <h4>
-                        <span><?php echo $i++; ?>. <?php echo htmlspecialchars($ej['ejercicio']); ?></span>
+                        <span style="display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <?php echo $i; ?>. <?php echo htmlspecialchars($ej['ejercicio']); ?>
+                            <?php if (!empty($ej['video_url'])): ?>
+                                <a href="<?php echo htmlspecialchars($ej['video_url']); ?>" target="_blank" onclick="event.preventDefault(); toggleVideo(<?php echo $i; ?>);" class="btn-video-badge" title="Ver video demostrativo de este ejercicio">
+                                    🎥 Video
+                                </a>
+                            <?php endif; ?>
+                        </span>
                         <?php if (!empty($ej['descanso'])): ?>
                             <span style="font-size: 14px; font-weight: normal; background: #e0e7ff; color: #3730a3; padding: 4px 12px; border-radius: 20px;">⏱️ Descanso: <?php echo htmlspecialchars($ej['descanso']); ?></span>
                         <?php endif; ?>
@@ -295,8 +338,40 @@ $linkEmail = "mailto:" . urlencode($rutina['cliente_email']) . "?subject=" . url
                             <?php endif; ?>
                         </tbody>
                     </table>
+
+                    <?php if (!empty($ej['video_url'])): ?>
+                        <!-- Reproductor de Video Desplegable debajo del ejercicio -->
+                        <div id="video_box_<?php echo $i; ?>" class="video-ejercicio-box" style="display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <strong style="color: #9f1239; font-size: 14px;">🎬 Video Demostrativo: <?php echo htmlspecialchars($ej['ejercicio']); ?></strong>
+                                <button type="button" onclick="toggleVideo(<?php echo $i; ?>)" style="background: none; border: none; font-size: 18px; cursor: pointer; color: #9f1239; font-weight: bold;">✕</button>
+                            </div>
+                            <?php 
+                            $isLocalVideo = (strpos($ej['video_url'], 'uploads/videos/') !== false) || preg_match('/\.(mp4|webm|mov|mkv)$/i', $ej['video_url']);
+                            if ($isLocalVideo): 
+                            ?>
+                                <video controls playsinline preload="metadata" style="width: 100%; max-width: 520px; max-height: 320px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: block; margin: 0 auto; background: #000;">
+                                    <source src="<?php echo htmlspecialchars($ej['video_url']); ?>">
+                                    Tu navegador no soporta reproducción de video.
+                                </video>
+                            <?php else: ?>
+                                <p style="margin: 0; color: #881337;">
+                                    🔗 Enlace al video externo: 
+                                    <a href="<?php echo htmlspecialchars($ej['video_url']); ?>" target="_blank" style="color: #e11d48; font-weight: bold; text-decoration: underline;">
+                                        Abrir video en Google Drive / YouTube ➔
+                                    </a>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Visible exclusivamente al imprimir en PDF -->
+                        <div class="video-pdf-print" style="display: none; font-size: 12px; color: #2563eb; margin-top: 8px;">
+                            🎥 <strong>Video:</strong> <a href="<?php echo htmlspecialchars($ej['video_url']); ?>" target="_blank"><?php echo htmlspecialchars($ej['video_url']); ?></a>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
-            <?php endforeach; ?>
+            <?php $i++; endforeach; ?>
         <?php else: ?>
             <p style="text-align: center; padding: 20px; color: #64748b;">No hay ejercicios registrados en esta rutina.</p>
         <?php endif; ?>
@@ -313,6 +388,23 @@ $linkEmail = "mailto:" . urlencode($rutina['cliente_email']) . "?subject=" . url
 <footer>
     <p style="text-align: center; padding: 25px; color: #777;">© 2026 Mi Gym - Planes de Entrenamiento Personalizados</p>
 </footer>
+
+<script>
+function toggleVideo(index) {
+    let box = document.getElementById(`video_box_${index}`);
+    if (box) {
+        if (box.style.display === "none" || box.style.display === "") {
+            box.style.display = "block";
+            let vid = box.querySelector("video");
+            if (vid) vid.play();
+        } else {
+            let vid = box.querySelector("video");
+            if (vid) vid.pause();
+            box.style.display = "none";
+        }
+    }
+}
+</script>
 
 </body>
 </html>

@@ -67,7 +67,7 @@ include("php/conexion.php");
 
     <h2>➕ Crear Nueva Rutina para Cliente</h2>
 
-    <form action="php/guardar_rutina.php" method="POST" class="form-entrenamiento">
+    <form action="php/guardar_rutina.php" method="POST" enctype="multipart/form-data" class="form-entrenamiento">
         
         <div class="form-grid">
             <div class="form-group">
@@ -182,15 +182,23 @@ include("php/conexion.php");
 <script>
 let contadorEjercicios = 0;
 
-function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', seriesInit = null) {
+function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', videoUrl = '', seriesInit = null) {
     let ejIndex = contadorEjercicios++;
     let cont = document.getElementById("contenedorEjercicios");
+    let numVisual = cont.children.length + 1;
 
     let card = document.createElement("div");
     card.className = "bloque-ejercicio";
     card.id = `ejercicio_bloque_${ejIndex}`;
 
     card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+            <span class="badge-numero-ejercicio" style="background: #1e3a8a; color: white; padding: 5px 14px; border-radius: 20px; font-weight: bold; font-size: 14px;">
+                🏋️ Ejercicio <span class="num-ej-label">#${numVisual}</span>
+            </span>
+            <button type="button" onclick="eliminarEjercicio(${ejIndex})" style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:6px 12px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px;">🗑️ Quitar Ejercicio</button>
+        </div>
+
         <div class="header-ejercicio">
             <div style="flex: 1; display: flex; gap: 15px; flex-wrap: wrap;">
                 <div style="flex: 2; min-width: 200px;">
@@ -202,8 +210,24 @@ function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', seriesInit = n
                     <input type="text" name="ejercicios[${ejIndex}][descanso]" value="${descansoEj}" placeholder="Ej: 90s, 2 min" style="margin:0; padding:10px;">
                 </div>
             </div>
-            <div>
-                <button type="button" onclick="eliminarEjercicio(${ejIndex})" style="background:#dc2626; color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:20px;">🗑️ Quitar Ejercicio</button>
+        </div>
+
+        <!-- Apartado específico para Video del Ejercicio -->
+        <input type="hidden" name="ejercicios[${ejIndex}][file_key]" value="video_file_${ejIndex}">
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; border-radius: 10px; padding: 14px; margin: 12px 0;">
+            <label style="color: #1e40af; font-size: 14px; margin-bottom: 8px; display: block;">
+                <strong>📹 Apartado de Video para este Ejercicio (Subir archivo o pegar enlace):</strong>
+            </label>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-start;">
+                <div style="flex: 1; min-width: 240px;">
+                    <span style="font-size: 12px; font-weight: bold; color: #1e40af;">📁 Subir archivo de video (MP4, WEBM, MOV...):</span>
+                    <input type="file" name="video_file_${ejIndex}" accept="video/*" onchange="mostrarInfoVideo(this, ${ejIndex})" style="margin: 4px 0 0 0; padding: 7px; font-size: 13px; background: white; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                    <div id="info_video_${ejIndex}" style="font-size: 12px; color: #15803d; margin-top: 5px; font-weight: bold;"></div>
+                </div>
+                <div style="flex: 1; min-width: 240px;">
+                    <span style="font-size: 12px; font-weight: bold; color: #1e40af;">🔗 O pegar enlace externo (Google Drive, YouTube...):</span>
+                    <input type="text" name="ejercicios[${ejIndex}][video_url]" value="${videoUrl}" placeholder="https://drive.google.com/... o https://youtube.com/..." style="margin: 4px 0 0 0; padding: 8px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                </div>
             </div>
         </div>
 
@@ -273,28 +297,61 @@ function renumerarSeries(tbody) {
     }
 }
 
+function mostrarInfoVideo(input, ejIndex) {
+    let info = document.getElementById(`info_video_${ejIndex}`);
+    if (!info) return;
+    if (input.files && input.files[0]) {
+        let file = input.files[0];
+        let sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+        info.innerHTML = `📹 Archivo seleccionado: <strong>${file.name}</strong> (${sizeMb} MB) listo para subir`;
+    } else {
+        info.innerHTML = "";
+    }
+}
+
 function eliminarEjercicio(ejIndex) {
     let cont = document.getElementById("contenedorEjercicios");
     if (cont.children.length > 1) {
         document.getElementById(`ejercicio_bloque_${ejIndex}`).remove();
+        renumerarEjercicios();
     } else {
         alert("La rutina debe tener al menos un ejercicio.");
     }
 }
 
-// Cargar 2 ejercicios por defecto al iniciar
+function renumerarEjercicios() {
+    let cont = document.getElementById("contenedorEjercicios");
+    let labels = cont.querySelectorAll(".num-ej-label");
+    labels.forEach((lbl, idx) => {
+        lbl.textContent = `#${idx + 1}`;
+    });
+}
+
+// Cargar 4 ejercicios diferentes por defecto (cada uno con su apartado de video)
 window.onload = function() {
-    agregarNuevoEjercicio("Press de banca plano con barra", "90s", [
+    agregarNuevoEjercicio("Press de banca plano con barra", "90s", "", [
         { peso: "70", reps: "12", nota: "Aproximación" },
         { peso: "75", reps: "10", nota: "RPE 8" },
         { peso: "80", reps: "8", nota: "RPE 9" },
         { peso: "82.5", reps: "6", nota: "Al fallo" }
     ]);
 
-    agregarNuevoEjercicio("Remo con barra", "90s", [
+    agregarNuevoEjercicio("Remo con barra inclinado", "90s", "", [
         { peso: "60", reps: "10", nota: "RPE 8" },
         { peso: "65", reps: "8", nota: "RPE 8.5" },
         { peso: "70", reps: "6", nota: "Al fallo" }
+    ]);
+
+    agregarNuevoEjercicio("Sentadilla libre trasera", "120s", "", [
+        { peso: "80", reps: "10", nota: "RPE 7.5" },
+        { peso: "90", reps: "8", nota: "RPE 8.5" },
+        { peso: "100", reps: "6", nota: "RPE 9" }
+    ]);
+
+    agregarNuevoEjercicio("Press militar de hombros con mancuernas", "90s", "", [
+        { peso: "22", reps: "12", nota: "Control en bajada" },
+        { peso: "24", reps: "10", nota: "RPE 8.5" },
+        { peso: "26", reps: "8", nota: "Al fallo" }
     ]);
 };
 </script>

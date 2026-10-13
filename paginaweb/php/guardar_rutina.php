@@ -1,4 +1,9 @@
 <?php
+@ini_set('upload_max_filesize', '500M');
+@ini_set('post_max_size', '1000M');
+@ini_set('max_execution_time', '600');
+@ini_set('memory_limit', '512M');
+
 include("conexion.php");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -41,10 +46,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // Insertar ejercicios y sus series
-        $stmtEj = $conexion->prepare("INSERT INTO rutina_ejercicios (rutina_id, ejercicio, series, repeticiones, peso, descanso, notas) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmtEj = $conexion->prepare("INSERT INTO rutina_ejercicios (rutina_id, ejercicio, series, repeticiones, peso, descanso, video_url, notas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmtSer = $conexion->prepare("INSERT INTO rutina_series (ejercicio_id, rutina_id, num_serie, peso, repeticiones, notas) VALUES (?, ?, ?, ?, ?, ?)");
 
-        foreach ($ejercicios_data as $ejData) {
+        foreach ($ejercicios_data as $ejIndex => $ejData) {
             $nombreEj = trim($ejData["nombre"] ?? '');
             if (!empty($nombreEj)) {
                 $descanso = trim($ejData["descanso"] ?? '90s');
@@ -52,11 +57,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $seriesList = $ejData["series"] ?? [];
                 $numSeries = count($seriesList);
 
+                // Gestión del video (archivo subido o enlace web/Drive/YouTube)
+                $videoFinal = trim($ejData["video_url"] ?? '');
+                if (empty($videoFinal) && !empty($ejData["video_url_existente"])) {
+                    $videoFinal = trim($ejData["video_url_existente"]);
+                }
+
+                $fileKey = !empty($ejData["file_key"]) ? $ejData["file_key"] : ("video_file_" . $ejIndex);
+                if ((!isset($_FILES[$fileKey]) || $_FILES[$fileKey]['error'] !== UPLOAD_ERR_OK) && isset($_FILES["video_file_" . $ejIndex])) {
+                    $fileKey = "video_file_" . $ejIndex;
+                }
+
+                if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === UPLOAD_ERR_OK) {
+                    $fileTmp = $_FILES[$fileKey]['tmp_name'];
+                    $fileName = $_FILES[$fileKey]['name'];
+                    $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                    $allowedExts = ['mp4', 'webm', 'mov', 'avi', 'mkv', 'm4v'];
+
+                    if (in_array($fileExt, $allowedExts)) {
+                        $uploadDir = __DIR__ . '/../uploads/videos/';
+                        if (!file_exists($uploadDir)) {
+                            @mkdir($uploadDir, 0777, true);
+                        }
+                        $newFileName = 'ejercicio_' . time() . '_' . rand(1000, 9999) . '.' . $fileExt;
+                        $destPath = $uploadDir . $newFileName;
+                        if (move_uploaded_file($fileTmp, $destPath)) {
+                            $videoFinal = 'uploads/videos/' . $newFileName;
+                        }
+                    }
+                }
+
                 // Representación resumen para compatibilidad
                 $repsResumen = $seriesList[0]["reps"] ?? '10';
                 $pesoResumen = $seriesList[0]["peso"] ?? '0';
 
-                $stmtEj->bind_param("isissss", $rutina_id, $nombreEj, $numSeries, $repsResumen, $pesoResumen, $descanso, $notasEj);
+                $stmtEj->bind_param("isisssss", $rutina_id, $nombreEj, $numSeries, $repsResumen, $pesoResumen, $descanso, $videoFinal, $notasEj);
                 $stmtEj->execute();
                 $ejercicio_id = $stmtEj->insert_id;
 

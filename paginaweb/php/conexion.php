@@ -58,10 +58,22 @@ CREATE TABLE IF NOT EXISTS rutina_ejercicios (
     repeticiones VARCHAR(60) NOT NULL DEFAULT '10',
     peso VARCHAR(60) DEFAULT '',
     descanso VARCHAR(60) DEFAULT '',
+    video_url TEXT DEFAULT NULL,
     notas VARCHAR(255) DEFAULT '',
     FOREIGN KEY (rutina_id) REFERENCES rutinas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
+
+$checkVideoCol = $conexion->query("SHOW COLUMNS FROM rutina_ejercicios LIKE 'video_url'");
+if ($checkVideoCol && $checkVideoCol->num_rows == 0) {
+    $conexion->query("ALTER TABLE rutina_ejercicios ADD COLUMN video_url TEXT DEFAULT NULL AFTER descanso");
+}
+
+// Crear carpeta de subida de videos si no existe
+$uploadDir = __DIR__ . '/../uploads/videos';
+if (!file_exists($uploadDir)) {
+    @mkdir($uploadDir, 0777, true);
+}
 
 // 4. Tabla de Series Individuales por Ejercicio
 $conexion->query("

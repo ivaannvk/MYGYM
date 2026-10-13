@@ -171,7 +171,10 @@ while ($a = $resAlimentos->fetch_assoc()) {
                     echo "<td><strong>" . htmlspecialchars($fila["titulo"]) . "</strong></td>";
                     echo "<td>";
                     echo "<span style='background:#dcfce7; color:#166534; padding:4px 10px; border-radius:12px; font-weight:bold; font-size:13px;'>📅 $numDias opción(es) / día(s)</span><br>";
-                    echo "<small style='color:#475569; margin-top:4px; display:inline-block;'>Ref: ~" . round($fila["total_calorias"]) . " kcal</small>";
+                    echo "<div style='font-size:12px; color:#334155; margin-top:5px; line-height:1.4;'>";
+                    echo "<strong style='color:#15803d;'>🔥 " . round($fila["total_calorias"]) . " kcal</strong><br>";
+                    echo "<span style='color:#475569;'>🥩 P: <strong>" . round($fila["total_proteinas"], 1) . "g</strong> | 🍚 HC: <strong>" . round($fila["total_carbos"], 1) . "g</strong> | 🥑 G: <strong>" . round($fila["total_grasas"], 1) . "g</strong></span>";
+                    echo "</div>";
                     echo "</td>";
                     echo "<td>";
                     if (!empty($fila["cliente_telefono"])) {
@@ -272,6 +275,16 @@ function agregarNuevoDia(nombreDia = null, comidasInit = null) {
                     </tr>
                 </thead>
                 <tbody id="tbody_comidas_dia_${diaIndex}"></tbody>
+                <tfoot>
+                    <tr style="background: #f0fdf4; font-weight: bold; border-top: 2px solid #10b981;">
+                        <td colspan="3" style="text-align: right; color: #166534; font-size: 13px;">SUMA TOTAL DE ESTE MENÚ:</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootKcal_${diaIndex}">0</span> kcal</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootProt_${diaIndex}">0</span> g</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootCarb_${diaIndex}">0</span> g</td>
+                        <td style="color: #15803d; font-size: 13px;"><span id="tfootGras_${diaIndex}">0</span> g</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     `;
@@ -446,6 +459,16 @@ function calcularTotalesDia(diaIndex) {
     if (pSpan) pSpan.textContent = totalProt.toFixed(1);
     if (cSpan) cSpan.textContent = totalCarb.toFixed(1);
     if (gSpan) gSpan.textContent = totalGras.toFixed(1);
+
+    let fk = document.getElementById(`tfootKcal_${diaIndex}`);
+    let fp = document.getElementById(`tfootProt_${diaIndex}`);
+    let fc = document.getElementById(`tfootCarb_${diaIndex}`);
+    let fg = document.getElementById(`tfootGras_${diaIndex}`);
+
+    if (fk) fk.textContent = Math.round(totalKcal);
+    if (fp) fp.textContent = totalProt.toFixed(1);
+    if (fc) fc.textContent = totalCarb.toFixed(1);
+    if (fg) fg.textContent = totalGras.toFixed(1);
 }
 
 window.onload = function() {

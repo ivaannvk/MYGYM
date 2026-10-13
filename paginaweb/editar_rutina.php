@@ -107,7 +107,7 @@ $stmtEj->close();
         <a href="musculatura.php" class="boton cancelar">⬅️ Cancelar y Volver</a>
     </div>
 
-    <form action="php/guardar_rutina.php" method="POST" class="form-entrenamiento" style="max-width: 950px; margin: 0 auto;">
+    <form action="php/guardar_rutina.php" method="POST" enctype="multipart/form-data" class="form-entrenamiento" style="max-width: 950px; margin: 0 auto;">
         <input type="hidden" name="id" value="<?php echo htmlspecialchars($rutina['id']); ?>">
 
         <h2>👤 Datos del Cliente y Rutina</h2>
@@ -160,15 +160,31 @@ $stmtEj->close();
 let contadorEjercicios = 0;
 const ejerciciosExistentes = <?php echo json_encode($ejercicios); ?>;
 
-function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', seriesInit = null) {
+function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', videoUrl = '', seriesInit = null) {
     let ejIndex = contadorEjercicios++;
     let cont = document.getElementById("contenedorEjercicios");
+    let numVisual = cont.children.length + 1;
 
     let card = document.createElement("div");
     card.className = "bloque-ejercicio";
     card.id = `ejercicio_bloque_${ejIndex}`;
 
+    let videoPreviewHtml = '';
+    if (videoUrl) {
+        videoPreviewHtml = `<div style="margin-top: 6px; font-size: 13px; color: #0284c7; background: #e0f2fe; padding: 6px 10px; border-radius: 6px;">
+            ✅ <strong>Video actual:</strong> <a href="${videoUrl}" target="_blank" style="color: #0284c7; text-decoration: underline; font-weight: bold;">Ver video cargado</a>
+            <input type="hidden" name="ejercicios[${ejIndex}][video_url_existente]" value="${videoUrl}">
+        </div>`;
+    }
+
     card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+            <span class="badge-numero-ejercicio" style="background: #1e3a8a; color: white; padding: 5px 14px; border-radius: 20px; font-weight: bold; font-size: 14px;">
+                🏋️ Ejercicio <span class="num-ej-label">#${numVisual}</span>
+            </span>
+            <button type="button" onclick="eliminarEjercicio(${ejIndex})" style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:6px 12px; border-radius:8px; cursor:pointer; font-weight:bold; font-size:13px;">🗑️ Quitar Ejercicio</button>
+        </div>
+
         <div class="header-ejercicio">
             <div style="flex: 1; display: flex; gap: 15px; flex-wrap: wrap;">
                 <div style="flex: 2; min-width: 200px;">
@@ -180,9 +196,26 @@ function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', seriesInit = n
                     <input type="text" name="ejercicios[${ejIndex}][descanso]" value="${descansoEj}" placeholder="Ej: 90s, 2 min" style="margin:0; padding:10px;">
                 </div>
             </div>
-            <div>
-                <button type="button" onclick="eliminarEjercicio(${ejIndex})" style="background:#dc2626; color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:20px;">🗑️ Quitar Ejercicio</button>
+        </div>
+
+        <!-- Apartado específico para Video del Ejercicio -->
+        <input type="hidden" name="ejercicios[${ejIndex}][file_key]" value="video_file_${ejIndex}">
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid #3b82f6; border-radius: 10px; padding: 14px; margin: 12px 0;">
+            <label style="color: #1e40af; font-size: 14px; margin-bottom: 8px; display: block;">
+                <strong>📹 Apartado de Video para este Ejercicio (Subir archivo o pegar enlace):</strong>
+            </label>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-start;">
+                <div style="flex: 1; min-width: 240px;">
+                    <span style="font-size: 12px; font-weight: bold; color: #1e40af;">📁 Subir nuevo video (MP4, WEBM, MOV...):</span>
+                    <input type="file" name="video_file_${ejIndex}" accept="video/*" onchange="mostrarInfoVideo(this, ${ejIndex})" style="margin: 4px 0 0 0; padding: 7px; font-size: 13px; background: white; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                    <div id="info_video_${ejIndex}" style="font-size: 12px; color: #15803d; margin-top: 5px; font-weight: bold;"></div>
+                </div>
+                <div style="flex: 1; min-width: 240px;">
+                    <span style="font-size: 12px; font-weight: bold; color: #1e40af;">🔗 O pegar/cambiar enlace (Drive, YouTube...):</span>
+                    <input type="text" name="ejercicios[${ejIndex}][video_url]" value="${videoUrl}" placeholder="https://drive.google.com/... o https://youtube.com/..." style="margin: 4px 0 0 0; padding: 8px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%;">
+                </div>
             </div>
+            ${videoPreviewHtml}
         </div>
 
         <div style="background: #f8fafc; border-radius: 8px; padding: 12px; margin-top: 10px;">
@@ -213,6 +246,36 @@ function agregarNuevoEjercicio(nombreEj = '', descansoEj = '90s', seriesInit = n
     } else {
         agregarSerieAEjercicio(ejIndex, '70', '10', '');
     }
+}
+
+function mostrarInfoVideo(input, ejIndex) {
+    let info = document.getElementById(`info_video_${ejIndex}`);
+    if (!info) return;
+    if (input.files && input.files[0]) {
+        let file = input.files[0];
+        let sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+        info.innerHTML = `📹 Archivo seleccionado: <strong>${file.name}</strong> (${sizeMb} MB) listo para guardar`;
+    } else {
+        info.innerHTML = "";
+    }
+}
+
+function eliminarEjercicio(ejIndex) {
+    let cont = document.getElementById("contenedorEjercicios");
+    if (cont.children.length > 1) {
+        document.getElementById(`ejercicio_bloque_${ejIndex}`).remove();
+        renumerarEjercicios();
+    } else {
+        alert("La rutina debe tener al menos un ejercicio.");
+    }
+}
+
+function renumerarEjercicios() {
+    let cont = document.getElementById("contenedorEjercicios");
+    let labels = cont.querySelectorAll(".num-ej-label");
+    labels.forEach((lbl, idx) => {
+        lbl.textContent = `#${idx + 1}`;
+    });
 }
 
 function agregarSerieAEjercicio(ejIndex, peso = '', reps = '10', nota = '') {
@@ -260,10 +323,10 @@ function eliminarEjercicio(ejIndex) {
 window.onload = function() {
     if (ejerciciosExistentes && ejerciciosExistentes.length > 0) {
         ejerciciosExistentes.forEach(ej => {
-            agregarNuevoEjercicio(ej.ejercicio, ej.descanso || '90s', ej.series_desglose);
+            agregarNuevoEjercicio(ej.ejercicio, ej.descanso || '90s', ej.video_url || '', ej.series_desglose);
         });
     } else {
-        agregarNuevoEjercicio("Press banca", "90s", [{ peso: "70", reps: "10", nota: "" }]);
+        agregarNuevoEjercicio("Press banca", "90s", "", [{ peso: "70", reps: "10", nota: "" }]);
     }
 };
 </script>
