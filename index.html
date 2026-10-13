@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Gym - Plataforma Integral de Entrenamiento y Nutrición</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Mi Gym</h1>
+        <p>Plataforma Profesional de Entrenamientos y Planes Nutricionales</p>
+    </header>
+
+    <nav>
+        <a href="index.html">Inicio</a>
+        <a href="musculatura.php">Rutinas</a>
+        <a href="nutricion.php">Dietas</a>
+        <a href="alimentos.php">Base de Alimentos</a>
+        <a href="descargar_powerpoint.php" download="Presentacion_TFG_MiGym.pptx" style="background: rgba(220, 38, 38, 0.25); border: 1px solid #ef4444; border-radius: 6px; font-weight: bold; color: #fca5a5;">📥 Descargar PowerPoint (.pptx)</a>
+        <a href="descargar_pdf.php" target="_blank" style="background: rgba(16, 185, 129, 0.25); border: 1px solid #10b981; border-radius: 6px;">📥 Descargar PDF TFG</a>
+        <a href="documentacion_tfg.html" target="_blank" style="background: rgba(2, 132, 199, 0.2); border: 1px solid #0284c7; border-radius: 6px;">🎓 Ver Memoria Web</a>
+        <a href="presentacion_tfg.html" target="_blank" style="background: rgba(37, 99, 235, 0.2); border: 1px solid #3b82f6; border-radius: 6px;">🖥️ Diapositivas TFG</a>
+    </nav>
+
+    <section>
+        
+        <!-- HERO BANNER PRINCIPAL -->
+        <div class="hero-banner">
+            <span class="hero-badge">🚀 SOFTWARE PARA ENTRENADORES Y NUTRICIONISTAS</span>
+            <h2 class="hero-title">Diseña, Gestiona y Envía Rutinas y Dietas a tus Clientes</h2>
+            <p class="hero-subtitle">
+                Crea tablas de ejercicios a medida, diseña planes nutricionales con cálculo automático de calorías y macronutrientes, y compártelos con tus clientes con un solo clic por <strong>WhatsApp</strong> y <strong>Correo Electrónico</strong>.
+            </p>
+            <div class="hero-actions">
+                <a href="musculatura.php" class="btn-hero-primary">🏋️ Crear Rutina de Ejercicios</a>
+                <a href="nutricion.php" class="btn-hero-secondary">🥗 Diseñar Plan de Dieta</a>
+                <a href="alimentos.php" class="btn-hero-secondary" style="background: rgba(2, 132, 199, 0.35);">🥑 Ver Base de Alimentos</a>
+            </div>
+        </div>
+
+        <!-- STATS & HIGHLIGHTS -->
+        <div class="stats-banner">
+            <div class="stat-item">
+                <h3>⚡ 1 Clic</h3>
+                <p>Envío instantáneo por WhatsApp y Email</p>
+            </div>
+            <div class="stat-item">
+                <h3 style="color:#10b981;">📊 100% Automático</h3>
+                <p>Cálculo de macros y calorías en tiempo real</p>
+            </div>
+            <div class="stat-item">
+                <h3 style="color:#0284c7;">🥑 Base de Datos</h3>
+                <p>Alimentos y valores editables a mano</p>
+            </div>
+            <div class="stat-item">
+                <h3 style="color:#f59e0b;">🖨️ Formato PDF</h3>
+                <p>Fichas profesionales listas para imprimir</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE MÓDULOS Y SERVICIOS -->
+        <h2 class="section-title">Nuestras Herramientas Principales</h2>
+        <p class="section-desc">Todo lo que necesitas para optimizar el seguimiento y la satisfacción de tus clientes en un solo lugar.</p>
+
+        <div class="features-grid">
+            
+            <div class="feature-card">
+                <div>
+                    <div class="feature-icon">🏋️</div>
+                    <h3>Gestor de Rutinas</h3>
+                    <p>Crea tablas de ejercicios personalizadas asignando series, repeticiones, peso estimado, descansos y notas técnicas para cada cliente.</p>
+                </div>
+                <a href="musculatura.php" class="boton" style="text-align: center; text-decoration: none;">Crear Rutina ➔</a>
+            </div>
+
+            <div class="feature-card nutricion">
+                <div>
+                    <div class="feature-icon">🥗</div>
+                    <h3 style="color:#065f46;">Gestor de Dietas</h3>
+                    <p>Planifica comidas diarias (desayunos, comidas, cenas y snacks) seleccionando alimentos de tu base de datos con cálculo automático de proteínas, carbos y grasas.</p>
+                </div>
+                <a href="nutricion.php" class="boton" style="background:#10b981; text-align: center; text-decoration: none;">Diseñar Dieta ➔</a>
+            </div>
+
+            <div class="feature-card alimentos">
+                <div>
+                    <div class="feature-icon">🥑</div>
+                    <h3 style="color:#0369a1;">Base de Alimentos</h3>
+                    <p>Tu propia base de datos nutricional: añade a mano cualquier alimento con sus calorías y macronutrientes por cada 100g, edítalos o bórralos en cualquier momento.</p>
+                </div>
+                <a href="alimentos.php" class="boton" style="background:#0284c7; text-align: center; text-decoration: none;">Gestionar Alimentos ➔</a>
+            </div>
+
+        </div>
+
+        <!-- CÓMO FUNCIONA -->
+        <h2 class="section-title">¿Cómo Funciona?</h2>
+        <p class="section-desc">Diseña y comparte los planes de tus clientes en solo 3 sencillos pasos.</p>
+
+        <div class="steps-grid">
+            
+            <div class="step-card">
+                <div class="step-badge">1</div>
+                <h4>Rellena los Datos</h4>
+                <p>Introduce el nombre de tu cliente, su contacto y selecciona los ejercicios o alimentos del plan.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-badge" style="background:#10b981;">2</div>
+                <h4>Cálculo Automático</h4>
+                <p>El sistema calcula al instante las series, los descansos y el balance exacto de macronutrientes y calorías.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-badge" style="background:#25D366;">3</div>
+                <h4>Envía por WhatsApp</h4>
+                <p>Pulsa el botón de WhatsApp y el cliente recibirá su plan estructurado con emojis y formato profesional.</p>
+            </div>
+
+        <!-- SECCIÓN DE ENTREGA Y DEFENSA DEL TFG -->
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: white; border-radius: 12px; padding: 35px; margin: 40px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px;">
+                <div>
+                    <span style="background: #3b82f6; color: white; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;">GRADO SUPERIOR EN DAW - TFG 2026</span>
+                    <h2 style="font-size: 26px; margin-top: 10px; color: #ffffff;">🎓 Documentación y Presentación para la Defensa</h2>
+                    <p style="color: #cbd5e1; font-size: 14px; margin-top: 5px;">Descarga directa de los materiales académicos oficiales listos para entregar al tribunal evaluador.</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+                <!-- Card 1: PowerPoint PPTX -->
+                <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 10px;">📊</div>
+                        <h3 style="font-size: 17px; margin-bottom: 8px; color: #fca5a5;">Presentación PowerPoint (.pptx)</h3>
+                        <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">Archivo nativo de Microsoft PowerPoint con 15 diapositivas, índice, diagramas de arquitectura, capturas y conclusiones.</p>
+                    </div>
+                    <a href="descargar_powerpoint.php" download="Presentacion_TFG_MiGym.pptx" style="background: #dc2626; color: white; text-align: center; padding: 10px 16px; border-radius: 6px; font-weight: bold; font-size: 13px; text-decoration: none; transition: .2s; display: block;">📥 Descargar PowerPoint (.pptx)</a>
+                </div>
+
+                <!-- Card 2: Memoria PDF -->
+                <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 10px;">📑</div>
+                        <h3 style="font-size: 17px; margin-bottom: 8px; color: #86efac;">Memoria Oficial en PDF</h3>
+                        <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">Documento técnico formal con especificación de requisitos, arquitectura, modelo E/R, diccionario SQL y pruebas.</p>
+                    </div>
+                    <a href="descargar_pdf.php" target="_blank" style="background: #059669; color: white; text-align: center; padding: 10px 16px; border-radius: 6px; font-weight: bold; font-size: 13px; text-decoration: none; transition: .2s; display: block;">📥 Descargar Memoria PDF</a>
+                </div>
+
+                <!-- Card 3: Visor Web Diapositivas -->
+                <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 10px;">🖥️</div>
+                        <h3 style="font-size: 17px; margin-bottom: 8px; color: #93c5fd;">Diapositivas Web Interactivas</h3>
+                        <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">Pase de diapositivas en el navegador con soporte para pantalla completa (F) y acordeón con el guion/notas para el orador.</p>
+                    </div>
+                    <a href="presentacion_tfg.html" target="_blank" style="background: #2563eb; color: white; text-align: center; padding: 10px 16px; border-radius: 6px; font-weight: bold; font-size: 13px; text-decoration: none; transition: .2s; display: block;">🖥️ Abrir Diapositivas Web</a>
+                </div>
+
+                <!-- Card 4: Memoria Web -->
+                <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 10px;">🎓</div>
+                        <h3 style="font-size: 17px; margin-bottom: 8px; color: #fde047;">Memoria Web Enriquecida</h3>
+                        <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin-bottom: 15px;">Lectura tipo libro en formato web con botones flotantes para impresión directa o descarga de los documentos.</p>
+                    </div>
+                    <a href="documentacion_tfg.html" target="_blank" style="background: #d97706; color: white; text-align: center; padding: 10px 16px; border-radius: 6px; font-weight: bold; font-size: 13px; text-decoration: none; transition: .2s; display: block;">🎓 Ver Memoria Web</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE CONTACTO Y ASISTENCIA -->
+        <div class="contacto-box" id="contacto">
+            <h2 style="margin-top: 0; color: #1e3a8a;">📞 Contacto y Soporte</h2>
+            <p style="color: #64748b;">¿Tienes dudas o necesitas atención personalizada? Estamos a tu disposición.</p>
+
+            <div class="contacto-grid">
+                <div class="contacto-item">
+                    <h4>📱 Teléfono / WhatsApp</h4>
+                    <p><a href="https://wa.me/34 631 31 14 42" target="_blank"><strong>+34 600 123 456</strong></a></p>
+                    <small style="color: #94a3b8;">Atención directa vía WhatsApp</small>
+                </div>
+
+                <div class="contacto-item">
+                    <h4>✉️ Correo Electrónico</h4>
+                    <p><a href="mailto: yassintouilachmel@gmail.com "><strong>yassintouilachmel@gmail.com</strong></a></p>
+                    <small style="color: #94a3b8;">Respuesta en menos de 24 horas</small>
+                </div>
+
+                <div class="contacto-item">
+                    <h4>📍 Ubicación y Horario</h4>
+                    <p><strong>Lunes a Viernes:</strong> 09:00 - 20:00</p>
+                    <p><strong>Sábados:</strong> 09:00 - 14:00</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer>
+        <p style="text-align: center; padding: 25px; color: #777;">© 2026 Mi Gym - Plataforma Integral de Entrenamiento y Nutrición <br> Desarrollado por Iván Amores </p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

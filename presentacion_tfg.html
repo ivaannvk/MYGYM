@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación TFG - Mi Gym (Defensa del Proyecto)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #10b981;
+            --danger: #e11d48;
+            --dark: #0f172a;
+            --gray-bg: #f8fafc;
+            --card-border: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #090d16;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* BARRA SUPERIOR DE CONTROL */
+        .top-bar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e293b;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .brand-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #60a5fa;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .controls-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-ctrl {
+            background: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-ctrl:hover {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .slide-counter {
+            font-size: 14px;
+            font-weight: 700;
+            color: #94a3b8;
+            background: #0f172a;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #334155;
+        }
+
+        /* CONTENEDOR PRINCIPAL DE DIAPOSITIVAS */
+        .presentation-stage {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px 40px 20px;
+            min-height: 100vh;
+        }
+
+        .slide-viewport {
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 16 / 9;
+            background: #ffffff;
+            color: var(--text-main);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .slide-viewport.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ESTRUCTURA INTERNA DE CADA SLIDE */
+        .slide-header {
+            padding: 24px 35px 15px 35px;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slide-badge {
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .slide-title {
+            font-size: 26px;
+            color: #0f172a;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .slide-content {
+            flex: 1;
+            padding: 25px 35px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .slide-content.full-width {
+            grid-template-columns: 1fr;
+            align-items: flex-start;
+        }
+
+        .slide-footer {
+            padding: 12px 35px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* COMPONENTES VISUALES DENTRO DE LOS SLIDES */
+        .feature-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #2563eb;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+        }
+
+        .feature-box h4 {
+            color: #1e3a8a;
+            font-size: 16px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-box p {
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .mockup-window {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .mockup-header {
+            background: #e2e8f0;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mockup-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .mockup-url {
+            background: white;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #64748b;
+            margin-left: 10px;
+            flex: 1;
+        }
+
+        .mockup-body {
+            padding: 16px;
+            font-size: 13px;
+        }
+
+        /* PANEL DE NOTAS DEL ORADOR */
+        .speaker-notes-panel {
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            width: 100%;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 16px 24px;
+            color: #e2e8f0;
+        }
+
+        .speaker-notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .speaker-notes-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .speaker-notes-body {
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            border-top: 1px solid #334155;
+            padding-top: 12px;
+        }
+
+        .speaker-notes-body strong {
+            color: #67e8f9;
+        }
+
+        /* ESTILOS PARA IMPRESIÓN Y PDF */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .top-bar, .speaker-notes-panel {
+                display: none !important;
+            }
+            .presentation-stage {
+                padding: 0;
+            }
+            .slide-viewport {
+                display: flex !important;
+                page-break-after: always;
+                margin-bottom: 20px;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                max-width: 100%;
+                aspect-ratio: auto;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR DE NAVEGACIÓN -->
+    <div class="top-bar">
+        <div class="brand-title">
+            <span>🏋️ Mi Gym</span> | <span>Defensa de Trabajo de Fin de Grado (DAW)</span>
+        </div>
+        <div class="controls-group">
+            <button class="btn-ctrl" onclick="anteriorSlide()">◀ Anterior</button>
+            <span class="slide-counter" id="slideIndicator">1 / 15</span>
+            <button class="btn-ctrl" onclick="siguienteSlide()">Siguiente ▶</button>
+            <button class="btn-ctrl" onclick="toggleFullScreen()">⛶ Pantalla Completa</button>
+            <a href="descargar_powerpoint.php" class="btn-ctrl" download="Presentacion_TFG_MiGym.pptx" style="background:#dc2626; border-color:#dc2626; color:white; text-decoration:none;">📥 Descargar PowerPoint (.pptx)</a>
+            <button class="btn-ctrl" onclick="window.print()" style="background:#059669; border-color:#059669;">🖨️ Diapositivas PDF</button>
+            <a href="index.html" class="btn-ctrl" style="text-decoration:none;">🏠 Inicio</a>
+        </div>
+    </div>
+
+    <!-- ESCENARIO DE PRESENTACIÓN -->
+    <div class="presentation-stage">
+
+        <!-- ==================== SLIDE 1: PORTADA ==================== -->
+        <div class="slide-viewport active" id="slide-1">
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px; background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color:white;">
+                <span style="background:rgba(255,255,255,0.15); padding:6px 18px; border-radius:30px; font-size:13px; font-weight:bold; letter-spacing:1px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.2);">
+                    PROYECTO DE FIN DE CICLO FORMATIVO (TFG) - CONVOCATORIA 2026
+                </span>
+                <h1 style="font-size: 38px; font-weight:900; line-height:1.2; margin-bottom: 15px; max-width:900px;">
+                    MI GYM - PLATAFORMA INTEGRAL DE ENTRENAMIENTO Y NUTRICIÓN MULTI-MENÚ
+                </h1>
+                <p style="font-size: 18px; color: #cbd5e1; max-width: 750px; margin-bottom: 35px; line-height:1.5;">
+                    Gestión avanzada de rutinas con vídeos demostrativos, desglose de series individuales y planes nutricionales con cálculo reactivo de macronutrientes.
+                </p>
+                <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:15px 30px; display:flex; gap:35px; font-size:14px; text-align:left;">
+                    <div><strong>Ciclo Formativo:</strong><br>Desarrollo de Aplicaciones Web (DAW)</div>
+                    <div><strong>Autor / Alumno:</strong><br>[Nombre del Alumno]</div>
+                    <div><strong>Tutor del Proyecto:</strong><br>[Nombre del Tutor]</div>
+                </div>
+            </div>
+            <div class="slide-footer" style="background:#0b1120; border-color:#1e293b; color:#94a3b8;">
+                <span>Mi Gym Web Platform</span>
+                <span>Diapositiva 1 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: INTRODUCCIÓN Y MOTIVACIÓN ==================== -->
+        <div class="slide-viewport" id="slide-2">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">1. Contexto & Problemática</span>
+                    <h2 class="slide-title">¿Por qué nace el proyecto Mi Gym?</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box">
+                        <h4>❌ El Problema Actual</h4>
+                        <p>Los entrenadores personales utilizan hojas de Excel dispersas, notas en el móvil o mensajes de WhatsApp desordenados. Los clientes no entienden cómo ejecutar los ejercicios ni disponen de alternativas en sus comidas.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>❌ Falta de Detalle en Cargas</h4>
+                        <p>Las apps habituales marcan "4 series de 10 reps", pero no permiten especificar el peso exacto de la Serie 1 (70kg), Serie 2 (75kg) o Serie 3 (80kg al fallo).</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>💡 Nuestra Solución</h4>
+                        <p>Una plataforma web ágil y profesional donde el entrenador confecciona planes precisos con vídeo y dietas multi-opción, enviándolas al cliente en 1 clic por WhatsApp.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/</span>
+                        </div>
+                        <div class="mockup-body" style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color:white; padding:25px; text-align:center;">
+                            <h3 style="font-size:20px; margin-bottom:8px;">🚀 Todo en una Sola Plataforma</h3>
+                            <p style="font-size:12px; color:#cbd5e1; margin-bottom:15px;">Diseño limpio, sin suscripciones caras ni software sobrecargado.</p>
+                            <div style="display:flex; justify-content:space-around; gap:10px;">
+                                <div style="background:rgba(255,255,255,0.1); padding:10px; border-radius:8px; font-size:12px; flex:1;">🏋️ Rutinas + Vídeo</div>
+                                <div style="background:rgba(255,255,255,0.1); padding:10px; border-radius:8px; font-size:12px; flex:1;">🥗 Dietas Multi-Día</div>
+                                <div style="background:rgba(255,255,255,0.1); padding:10px; border-radius:8px; font-size:12px; flex:1;">📲 WhatsApp 1 Clic</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 2 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: OBJETIVOS ==================== -->
+        <div class="slide-viewport" id="slide-3">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">2. Alcance del Proyecto</span>
+                    <h2 class="slide-title">Objetivos Principales y Propuesta de Valor</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>🎯 Objetivo General</h4>
+                        <p>Desarrollar una aplicación web modular en PHP y MySQL con interfaz responsiva para la confección y distribución omnicanal de rutinas de fuerza y planes de nutrición personalizados.</p>
+                    </div>
+                    <ul style="list-style: none; padding-left: 0; display:flex; flex-direction:column; gap:10px;">
+                        <li style="background:#f1f5f9; padding:10px 14px; border-radius:8px; font-size:13px;">
+                            <strong>1. Catálogo Nutricional Propio:</strong> Base de datos de alimentos con cálculo de macronutrientes por 100g editable por el profesional.
+                        </li>
+                        <li style="background:#f1f5f9; padding:10px 14px; border-radius:8px; font-size:13px;">
+                            <strong>2. Soporte Multimedia Sin Límites:</strong> Subida de vídeos MP4 en servidor o enlaces a Drive/YouTube para cada ejercicio.
+                        </li>
+                        <li style="background:#f1f5f9; padding:10px 14px; border-radius:8px; font-size:13px;">
+                            <strong>3. Planes Multi-Menú:</strong> Alternativas equivalentes de comidas (Día 1, Día 2...) calculando totales dinámicamente.
+                        </li>
+                    </ul>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:16px; border-radius:10px;">
+                        <h4 style="color:#15803d; margin-bottom:5px;">⚡ Eficiencia Operativa</h4>
+                        <p style="color:#166534; font-size:13px;">Reduce el tiempo de confección de una dieta y rutina de 45 minutos a menos de 5 minutos.</p>
+                    </div>
+                    <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:16px; border-radius:10px;">
+                        <h4 style="color:#1e40af; margin-bottom:5px;">📲 Adherencia del Cliente</h4>
+                        <p style="color:#1e3a8a; font-size:13px;">El cliente consulta su rutina en el gimnasio desde WhatsApp con vídeos integrados sin instalar ninguna app externa.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 3 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4: STACK TECNOLÓGICO ==================== -->
+        <div class="slide-viewport" id="slide-4">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">3. Tecnologías Empleadas</span>
+                    <h2 class="slide-title">Stack Tecnológico y Arquitectura</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #f59e0b;">
+                        <h4>🎨 Frontend (Cliente)</h4>
+                        <p><strong>HTML5 Semántico</strong>, <strong>CSS3 Moderno</strong> (Variables, Grid, Flexbox y @media print) y <strong>JavaScript Vanilla ES6+</strong> para interactividad reactiva sin sobrecarga de librerías.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #6366f1;">
+                        <h4>⚙️ Backend (Servidor)</h4>
+                        <p><strong>PHP 8.x</strong> modular y orientado a procesos, con validación de peticiones multipart/form-data, sesiones y APIs de integración.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #0284c7;">
+                        <h4>🗄️ Capa de Datos</h4>
+                        <p><strong>MySQL / MariaDB (InnoDB)</strong> con sentencias preparadas (Prepared Statements), transacciones e integridad referencial en cascada.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">Arquitectura Cliente - Servidor</span>
+                        </div>
+                        <div class="mockup-body" style="background:#0f172a; color:#f8fafc; padding:20px; font-family:monospace; font-size:12px; line-height:1.7;">
+                            <div style="color:#38bdf8;">// Flujo de Peticiones y Respuestas</div>
+                            <div>1. Cliente envía FormData [Multipart/POST]</div>
+                            <div>2. Apache procesa directivas (.htaccess 1000M)</div>
+                            <div>3. PHP valida tipos MIME y sanea entradas</div>
+                            <div>4. MySQL ejecuta Prepared Statements ($stmt)</div>
+                            <div>5. Retorno HTML + JS reactivo en tiempo real</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 4 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: BASE DE DATOS ==================== -->
+        <div class="slide-viewport" id="slide-5">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">4. Modelo de Datos</span>
+                    <h2 class="slide-title">Estructura Relacional y Base de Datos (MySQL)</h2>
+                </div>
+            </div>
+            <div class="slide-content full-width">
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; width:100%;">
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#2563eb;">🍎 alimentos</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>nombre<br>calorias (100g)<br>proteinas (100g)<br>carbohidratos<br>grasas<br>categoria
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#2563eb;">🏋️ rutinas</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>cliente_nombre<br>cliente_telefono<br>cliente_email<br>titulo<br>notas<br>fecha
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#2563eb;">📋 rutina_ejercicios</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>rutina_id (FK)<br>ejercicio<br>series<br>descanso<br><strong style="color:#e11d48;">video_url (TEXT)</strong>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#2563eb;">🔢 rutina_series</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>ejercicio_id (FK)<br>rutina_id (FK)<br>num_serie<br>peso (kg)<br>repeticiones<br>notas (RPE)
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; width:100%; margin-top:10px;">
+                    <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#166534;">🥗 dietas</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>cliente_nombre<br>cliente_telefono<br>titulo<br>total_calorias / macros<br>fecha
+                    </div>
+                    <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#166534;">📅 dieta_dias</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>dieta_id (FK)<br>nombre_dia (Día 1, Opción A)<br>orden
+                    </div>
+                    <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:8px; padding:10px; font-size:12px;">
+                        <strong style="color:#166534;">🍴 dieta_comidas</strong>
+                        <hr style="margin:5px 0;">
+                        id (PK)<br>dieta_id (FK)<br>dia_id (FK)<br>comida_tipo<br>alimento_nombre<br>gramos / Kcal / P / C / G
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 5 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: MÓDULO 1 - LANDING PAGE ==================== -->
+        <div class="slide-viewport" id="slide-6">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">5. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 1: Portada Corporativa (index.html)</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box">
+                        <h4>🌟 Hero Banner de Impacto</h4>
+                        <p>Diseño premium con llamada a la acción hacia las tres herramientas clave (Rutinas, Dietas y Catálogo de Alimentos).</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>⚡ Barra de Estadísticas & Beneficios</h4>
+                        <p>Insignias de valor: Envío en 1 Clic, Cálculo 100% Automático de macros, Base de datos editable y Exportación PDF.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>📱 100% Responsivo</h4>
+                        <p>Maquetación CSS Grid y Flexbox adaptada a cualquier resolución.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/index.html</span>
+                        </div>
+                        <div class="mockup-body" style="padding:15px; background:#f8fafc;">
+                            <div style="background: linear-gradient(135deg, #1e3a8a, #0284c7); padding:15px; border-radius:8px; color:white; text-align:center;">
+                                <small style="background:rgba(255,255,255,0.2); padding:3px 8px; border-radius:10px; font-size:10px;">🚀 PLATAFORMA PARA ENTRENADORES</small>
+                                <h4 style="margin:8px 0 4px 0; font-size:15px;">Diseña, Gestiona y Envía</h4>
+                                <div style="display:flex; justify-content:center; gap:6px; margin-top:8px;">
+                                    <span style="background:#2563eb; padding:4px 8px; border-radius:4px; font-size:10px;">🏋️ Rutinas</span>
+                                    <span style="background:#10b981; padding:4px 8px; border-radius:4px; font-size:10px;">🥗 Dietas</span>
+                                    <span style="background:#0284c7; padding:4px 8px; border-radius:4px; font-size:10px;">🥑 Alimentos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 6 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7: MÓDULO 2 - BASE DE ALIMENTOS ==================== -->
+        <div class="slide-viewport" id="slide-7">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">6. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 2: Base de Datos de Alimentos (alimentos.php)</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box">
+                        <h4>🥑 CRUD Completo Nutricional</h4>
+                        <p>El entrenador añade manualmente cualquier alimento con sus calorías, proteínas, carbohidratos y grasas por cada 100 gramos.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>🔍 Buscador Reactivo en Vivo</h4>
+                        <p>Filtrado dinámico en JavaScript mediante eventos de teclado, sin necesidad de recargar la página web.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>🌱 Precarga Automática (Seeding)</h4>
+                        <p>Siembra automática de 15 alimentos básicos al inicializar la base de datos.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/alimentos.php</span>
+                        </div>
+                        <div class="mockup-body" style="padding:10px;">
+                            <input type="text" value="🔍 Filtrar alimentos..." readonly style="width:100%; padding:6px; font-size:11px; margin-bottom:8px; border:1px solid #ccc; border-radius:4px;">
+                            <table style="width:100%; font-size:10px; border-collapse:collapse;">
+                                <tr style="background:#f1f5f9; text-align:left;">
+                                    <th style="padding:4px;">Alimento</th><th>Kcal/100g</th><th>Proteína</th><th>Carbos</th><th>Grasas</th>
+                                </tr>
+                                <tr><td style="padding:4px;"><strong>Pechuga de pollo</strong></td><td>165 kcal</td><td>31 g</td><td>0 g</td><td>3.6 g</td></tr>
+                                <tr><td style="padding:4px;"><strong>Arroz blanco</strong></td><td>130 kcal</td><td>2.7 g</td><td>28 g</td><td>0.3 g</td></tr>
+                                <tr><td style="padding:4px;"><strong>Avena</strong></td><td>389 kcal</td><td>16.9 g</td><td>66.3 g</td><td>6.9 g</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 7 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: MÓDULO 3 - RUTINAS & SERIES ==================== -->
+        <div class="slide-viewport" id="slide-8">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">7. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 3: Planificador de Rutinas (musculatura.php)</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box">
+                        <h4>🏋️ 4 Ejercicios Preparados de Partida</h4>
+                        <p>La interfaz inicializa directamente 4 bloques de ejercicios con sus tablas de series y cajas de vídeo listas para rellenar.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>📊 Desglose Serie por Serie</h4>
+                        <p>Cada serie tiene su propio peso en kg y repeticiones: permite entrenamientos piramidales, aproximaciones y notas de fallo muscular.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>♾️ Sin Límite de Ejercicios</h4>
+                        <p>Botón reactivo que permite añadir Ejercicio #5, #6, #7... de forma ilimitada.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/musculatura.php</span>
+                        </div>
+                        <div class="mockup-body" style="padding:10px;">
+                            <div style="background:#eff6ff; border-left:3px solid #2563eb; padding:8px; border-radius:6px; margin-bottom:8px;">
+                                <strong style="font-size:11px; color:#1e40af;">🏋️ Ejercicio #1: Press banca plano</strong>
+                                <table style="width:100%; font-size:9px; margin-top:5px; border-collapse:collapse;">
+                                    <tr style="background:white;"><td><strong>S1</strong></td><td>70 kg</td><td>12 reps</td><td>Aproximación</td></tr>
+                                    <tr style="background:white;"><td><strong>S2</strong></td><td>75 kg</td><td>10 reps</td><td>RPE 8</td></tr>
+                                    <tr style="background:white;"><td><strong>S3</strong></td><td>80 kg</td><td>8 reps</td><td>Al fallo</td></tr>
+                                </table>
+                            </div>
+                            <div style="background:#eff6ff; border:1px solid #bfdbfe; padding:6px; border-radius:6px; font-size:10px;">
+                                📹 <strong>Video del Ejercicio:</strong> Subir archivo MP4 o pegar URL de Drive/YouTube
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 8 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 9: MÓDULO 3 CONT. - REPRODUCTOR DE VÍDEO ==================== -->
+        <div class="slide-viewport" id="slide-9">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">8. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 3 (Cont.): Reproductor Multimedia Integrado</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #e11d48;">
+                        <h4>🎥 Botón "Video" en cada Ejercicio</h4>
+                        <p>En la ficha del cliente (ver_rutina.php), cada ejercicio muestra una insignia interactiva para desplegar el vídeo técnico.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #e11d48;">
+                        <h4>📺 Reproducción In-Situ</h4>
+                        <p>El cliente reproduce el ejercicio en la propia página web mediante reproductor HTML5, sin salir a apps externas ni perder su sesión.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #e11d48;">
+                        <h4>🚀 Servidor Configurado para 1.000 MB</h4>
+                        <p>Configuración .htaccess y php.ini que permite subir vídeos pesados sin cortes ni bloqueos de límite POST.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/ver_rutina.php?id=1</span>
+                        </div>
+                        <div class="mockup-body" style="padding:15px; background:#f8fafc; text-align:center;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <strong style="font-size:13px;">1. Sentadilla libre con barra</strong>
+                                <span style="background:#e11d48; color:white; padding:3px 10px; border-radius:15px; font-size:10px; font-weight:bold;">🎥 Video</span>
+                            </div>
+                            <div style="background:#0f172a; border-radius:8px; padding:25px; color:#94a3b8; font-size:12px;">
+                                ▶️ [Reproductor de Vídeo HTML5 Activo]<br>
+                                <small style="color:#64748b;">uploads/videos/ejercicio_peso_muerto.mp4</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 9 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 10: MÓDULO 4 - DIETAS MULTI-DÍA ==================== -->
+        <div class="slide-viewport" id="slide-10">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">9. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 4: Gestor de Dietas Multi-Día (nutricion.php)</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>📅 Pestañas de Días / Opciones de Menú</h4>
+                        <p>El entrenador planifica múltiples días (Día 1, Día 2, Día de Entreno, Día de Descanso) en una sola ficha de cliente.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>⚡ Cálculo Matemático Instantáneo</h4>
+                        <p>Al seleccionar un alimento y fijar los gramos, el sistema computa al vuelo Kcal, Proteínas, Carbohidratos y Grasas.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>➕ Suma Total por Menú</h4>
+                        <p>Fila inferior fija en la tabla que refleja en directo el total acumulado de cada día.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/nutricion.php</span>
+                        </div>
+                        <div class="mockup-body" style="padding:10px;">
+                            <div style="display:flex; gap:6px; margin-bottom:8px;">
+                                <span style="background:#10b981; color:white; padding:4px 10px; border-radius:6px; font-size:10px; font-weight:bold;">📅 Día 1 (Opción A)</span>
+                                <span style="background:#e2e8f0; color:#334155; padding:4px 10px; border-radius:6px; font-size:10px;">📅 Día 2 (Opción B)</span>
+                            </div>
+                            <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:8px; border-radius:6px; display:flex; justify-content:space-around; font-size:10px; text-align:center;">
+                                <div>🔥 <strong>1850</strong> Kcal</div>
+                                <div>🥩 <strong>140g</strong> Prot</div>
+                                <div>🍚 <strong>180g</strong> Carbos</div>
+                                <div>🥑 <strong>45g</strong> Grasas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 10 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 11: MÓDULO 4 CONT. - BALANCE TOTAL ==================== -->
+        <div class="slide-viewport" id="slide-11">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">10. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 4 (Cont.): Balance Total de Nutrientes</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>🎯 Banner de Totales en Cabecera</h4>
+                        <p>En ver_dieta.php, justo debajo del título ("Definición 1800 kcal"), se muestran las 4 tarjetas con las Kcal y macros totales.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>🔄 Sincronización Reactiva</h4>
+                        <p>Al hacer clic en cualquier botón de día (Día 1, Día 2...), el banner de totales actualiza inmediatamente sus números sin recargar.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>📲 Envío Específico o Global</h4>
+                        <p>Permite enviar a WhatsApp la dieta entera o solo el día activo que el cliente desea consumir hoy.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">http://localhost/paginaweb/ver_dieta.php?id=1</span>
+                        </div>
+                        <div class="mockup-body" style="padding:15px; background:#f8fafc;">
+                            <h4 style="color:#065f46; font-size:14px; margin-bottom:10px;">📊 Balance Nutricional Total: Día 1</h4>
+                            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;">
+                                <div style="background:white; border:1px solid #86efac; padding:10px; border-radius:6px; text-align:center;">
+                                    <small style="color:#166534; font-size:10px;">🔥 CALORÍAS</small><br><strong style="font-size:16px; color:#15803d;">1.840 kcal</strong>
+                                </div>
+                                <div style="background:white; border:1px solid #86efac; padding:10px; border-radius:6px; text-align:center;">
+                                    <small style="color:#166534; font-size:10px;">🥩 PROTEÍNAS</small><br><strong style="font-size:16px; color:#15803d;">145.2 g</strong>
+                                </div>
+                                <div style="background:white; border:1px solid #86efac; padding:10px; border-radius:6px; text-align:center;">
+                                    <small style="color:#166534; font-size:10px;">🍚 CARBOHIDRATOS</small><br><strong style="font-size:16px; color:#15803d;">182.0 g</strong>
+                                </div>
+                                <div style="background:white; border:1px solid #86efac; padding:10px; border-radius:6px; text-align:center;">
+                                    <small style="color:#166534; font-size:10px;">🥑 GRASAS</small><br><strong style="font-size:16px; color:#15803d;">42.5 g</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 11 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 12: MÓDULO 5 - WHATSAPP & PDF ==================== -->
+        <div class="slide-viewport" id="slide-12">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">11. Demostración Visual</span>
+                    <h2 class="slide-title">Módulo 5: Distribución en 1 Clic (WhatsApp & PDF)</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #25D366;">
+                        <h4>📲 Integración API WhatsApp</h4>
+                        <p>Construcción de texto preformateado con emojis y Markdown (`*negrita*`) enviado mediante el protocolo universal de WhatsApp.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #0284c7;">
+                        <h4>✉️ Envío por Correo Electrónico</h4>
+                        <p>Enlace mailto con asunto y cuerpo completo estructurado para clientes corporativos.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #475569;">
+                        <h4>🖨️ Exportación a PDF Limpio</h4>
+                        <p>Hojas de estilo CSS @media print que ocultan botones de administración y dejan un documento impecable listo para imprimir.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">WhatsApp Chat Preview</span>
+                        </div>
+                        <div class="mockup-body" style="background:#efeae2; padding:12px;">
+                            <div style="background:#d9fdd3; padding:10px; border-radius:8px; font-size:11px; max-width:85%; margin-left:auto; box-shadow:0 1px 2px rgba(0,0,0,0.1); line-height:1.4;">
+                                🏋️ <strong>PLAN DE ENTRENAMIENTO - MI GYM</strong><br>
+                                ━━━━━━━━━━━━━━━━━━━━<br>
+                                👤 <strong>Cliente:</strong> Carlos López<br>
+                                📋 <strong>Rutina:</strong> Hipertrofia Torso-Pierna<br><br>
+                                <strong>1. Press banca con barra</strong> (90s)<br>
+                                • Serie 1: 70kg x 12 reps<br>
+                                • Serie 2: 75kg x 10 reps<br>
+                                • Serie 3: 80kg x 8 reps<br>
+                                🎥 <strong>Video:</strong> http://localhost/paginaweb/uploads/videos/ejercicio_1.mp4
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 12 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 13: SEGURIDAD Y RENDIMIENTO ==================== -->
+        <div class="slide-viewport" id="slide-13">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">12. Aspectos Técnicos</span>
+                    <h2 class="slide-title">Seguridad, Rendimiento y Buenas Prácticas</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>🛡️ Prevención de Inyección SQL</h4>
+                        <p>Uso sistemático de <strong>Sentencias Preparadas (Prepared Statements)</strong> con mysqli_stmt en todas las operaciones de base de datos.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>🔒 Protección contra Cross-Site Scripting (XSS)</h4>
+                        <p>Escape y sanitización de todas las salidas dinámicas con <code>htmlspecialchars()</code>.</p>
+                    </div>
+                    <div class="feature-box" style="border-left-color: #10b981;">
+                        <h4>📁 Subida Segura de Archivos</h4>
+                        <p>Filtrado de extensiones válidas de vídeo, renombrado criptoseguro para evitar ejecución de scripts maliciosos y aislamiento de rutas.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="mockup-dot dot-red"></span>
+                            <span class="mockup-dot dot-yellow"></span>
+                            <span class="mockup-dot dot-green"></span>
+                            <span class="mockup-url">Seguridad de Backend (PHP)</span>
+                        </div>
+                        <div class="mockup-body" style="background:#0f172a; color:#f8fafc; padding:15px; font-family:monospace; font-size:11px; line-height:1.6;">
+                            <span style="color:#22c55e;">// Sentencia Preparada Segura</span><br>
+                            $stmt = $conexion->prepare(<br>
+                            &nbsp;&nbsp;"INSERT INTO rutina_ejercicios ... VALUES (?, ?, ?)"<br>
+                            );<br>
+                            $stmt->bind_param("isi", $rutina_id, $ej, $series);<br>
+                            $stmt->execute();<br><br>
+                            <span style="color:#38bdf8;">// Prevención XSS</span><br>
+                            echo htmlspecialchars($fila['nombre']);
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 13 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 14: CONCLUSIONES Y FUTURO ==================== -->
+        <div class="slide-viewport" id="slide-14">
+            <div class="slide-header">
+                <div>
+                    <span class="slide-badge">13. Cierre del Proyecto</span>
+                    <h2 class="slide-title">Conclusiones y Líneas Futuras</h2>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div>
+                    <div class="feature-box">
+                        <h4>✅ Cumplimiento del 100% de Objetivos</h4>
+                        <p>Desarrollo completado y validado en entorno real de trabajo con un entrenador profesional.</p>
+                    </div>
+                    <div class="feature-box">
+                        <h4>🎓 Competencias DAW Demostradas</h4>
+                        <p>Desarrollo web full-stack, bases de datos relacionales, responsive design, manipulación DOM y seguridad informática.</p>
+                    </div>
+                </div>
+                <div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:16px; border-radius:10px; margin-bottom:12px;">
+                        <h4 style="color:#166534; font-size:14px; margin-bottom:5px;">🚀 Próximas Fases de Desarrollo:</h4>
+                        <ul style="padding-left:18px; font-size:12px; color:#15803d; line-height:1.6;">
+                            <li>Área privada con login para clientes y tracking de marcas.</li>
+                            <li>Gráficos temporales de sobrecarga progresiva con Chart.js.</li>
+                            <li>Pasarela de cobro de suscripciones integrada con Stripe.</li>
+                            <li>Versión PWA para acceso offline en el gimnasio.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-footer">
+                <span>Ciclo Superior DAW - Proyecto Fin de Grado</span>
+                <span>Diapositiva 14 de 15</span>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 15: DESPEDIDA Y TURNO DE PREGUNTAS ==================== -->
+        <div class="slide-viewport" id="slide-15">
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px; background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%); color:white;">
+                <span style="background:rgba(255,255,255,0.15); padding:6px 18px; border-radius:30px; font-size:13px; font-weight:bold; letter-spacing:1px; margin-bottom:20px;">
+                    FIN DE LA EXPOSICIÓN
+                </span>
+                <h1 style="font-size: 42px; font-weight:900; margin-bottom: 15px;">
+                    ¡Muchas Gracias por su Atención!
+                </h1>
+                <p style="font-size: 20px; color: #93c5fd; margin-bottom: 30px;">
+                    Quedo a disposición del Tribunal para responder a sus preguntas y demostración práctica.
+                </p>
+                <div style="background:rgba(255,255,255,0.1); padding:12px 25px; border-radius:10px; font-size:14px;">
+                    🏋️ <strong>Mi Gym Web Platform</strong> - Proyecto Fin de Grado DAW 2026
+                </div>
+            </div>
+            <div class="slide-footer" style="background:#0b1120; border-color:#1e293b; color:#94a3b8;">
+                <span>Turno de Preguntas del Tribunal</span>
+                <span>Diapositiva 15 de 15</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- PANEL INFERIOR DE NOTAS DEL ORADOR (GUION PARA EL ALUMNO) -->
+    <div class="speaker-notes-panel">
+        <div class="speaker-notes-header" onclick="toggleNotes()">
+            <div class="speaker-notes-title">
+                🎙️ <span>NOTAS DEL ORADOR (Guion para la defensa del TFG ante el Tribunal)</span>
+            </div>
+            <span id="notesToggleIcon">▼ Ocultar/Mostrar</span>
+        </div>
+        <div class="speaker-notes-body" id="speakerNotesText">
+            <!-- El contenido cambia dinámicamente con JavaScript según el slide actual -->
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 15;
+
+        // GUION DE DEFENSA DETALLADO PARA CADA DIAPOSITIVA (LO QUE DEBE DECIR EL ALUMNO)
+        const notasOrador = {
+            1: "<strong>Guion Diapositiva 1 (Portada):</strong> 'Buenos días a los miembros del tribunal. Mi nombre es [Tu Nombre] y hoy tengo el honor de presentarles mi Trabajo de Fin de Grado titulado Mi Gym, una plataforma web integral concebida para la gestión técnica de entrenamientos y nutrición personalizada.'",
+            2: "<strong>Guion Diapositiva 2 (Contexto):</strong> 'La idea surgió de una necesidad real de un entrenador personal. Actualmente, muchos entrenadores gestionan a sus clientes mediante hojas de cálculo o mensajes desestructurados, lo que genera dudas constantes en la técnica de los ejercicios y pérdida de tiempo en calcular calorías a mano.'",
+            3: "<strong>Guion Diapositiva 3 (Objetivos):</strong> 'El objetivo primordial ha sido crear una herramienta rápida, donde el entrenador pueda diseñar un plan completo en 5 minutos, asignar vídeos demostrativos y desglosar series con sus pesos específicos, además de calcular automáticamente los macros de cada día.'",
+            4: "<strong>Guion Diapositiva 4 (Stack):</strong> 'A nivel de arquitectura hemos apostado por tecnologías web nativas y robustas: HTML5, CSS3 y JavaScript Vanilla ES6+ en el cliente para máxima ligereza y reactividad sin frameworks pesados, y PHP 8 con MySQL en el servidor para un procesamiento seguro y modular.'",
+            5: "<strong>Guion Diapositiva 5 (Base de Datos):</strong> 'La base de datos relacional consta de 7 tablas vinculadas con claves foráneas en cascada. Destacan rutina_series para almacenar cada serie individual con su peso y repeticiones, y dieta_dias y dieta_comidas para permitir planes con múltiples opciones de menú para un mismo cliente.'",
+            6: "<strong>Guion Diapositiva 6 (Landing Page):</strong> 'La portada presenta una imagen corporativa profesional y moderna con accesos directos hacia los tres módulos de trabajo: Rutinas, Dietas y Catálogo de Alimentos, 100% responsiva para trabajar desde un smartphone o PC.'",
+            7: "<strong>Guion Diapositiva 7 (Alimentos):</strong> 'El catálogo de alimentos permite al profesional introducir sus propios ingredientes con macros por cada 100g. Implementa un buscador en tiempo real mediante JavaScript que filtra el listado al vuelo conforme se teclea, optimizando los tiempos de búsqueda.'",
+            8: "<strong>Guion Diapositiva 8 (Rutinas y Series):</strong> 'En el creador de rutinas, inicializamos por defecto 4 ejercicios completos para agilizar la carga. El entrenador puede añadir series ilimitadas con cargas piramidales, como vemos aquí: Serie 1 a 70kg, Serie 2 a 75kg y Serie 3 a 80kg al fallo.'",
+            9: "<strong>Guion Diapositiva 9 (Vídeos Integrados):</strong> 'Una de las grandes aportaciones del proyecto es el soporte de vídeo. El entrenador puede subir archivos MP4 directamente al servidor o pegar enlaces a Google Drive/YouTube. El cliente ve el vídeo incrustado en su pantalla sin salir de la página web.'",
+            10: "<strong>Guion Diapositiva 10 (Dietas Multi-Día):</strong> 'En el gestor de dietas, permitimos crear menús alternativos: si el cliente un día no quiere comer pollo, puede cambiar a la pestaña del Día 2 con pescado. Todo el balance de calorías y macronutrientes se calcula en tiempo real a partir de los gramos indicados.'",
+            11: "<strong>Guion Diapositiva 11 (Balance Total):</strong> 'En la vista de cliente, situamos un banner superior prominente con las 4 tarjetas de calorías, proteínas, carbohidratos y grasas totales. Al pulsar entre las opciones de menú, estos números se actualizan instantáneamente sin recargar la página.'",
+            12: "<strong>Guion Diapositiva 12 (WhatsApp & PDF):</strong> 'Para la distribución, integramos la API de WhatsApp formateando el texto con emojis y negritas, de modo que el cliente recibe su tabla en 1 clic. También incluimos reglas CSS @media print para exportar un PDF impecable listo para imprimir.'",
+            13: "<strong>Guion Diapositiva 13 (Seguridad):</strong> 'En el apartado de seguridad, todas las consultas SQL utilizan sentencias preparadas (Prepared Statements) para prevenir inyecciones SQL. Las salidas se sanean contra XSS y la subida de ficheros cuenta con validación estricta de extensiones y directivas en .htaccess.'",
+            14: "<strong>Guion Diapositiva 14 (Conclusiones):</strong> 'El proyecto ha cumplido el 100% de los requisitos funcionales, demostrando las competencias del ciclo formativo DAW. Como trabajo futuro, se contempla crear un login privado para que los clientes registren sus propios pesos y pasarelas de pago con Stripe.'",
+            15: "<strong>Guion Diapositiva 15 (Cierre):</strong> 'Con esto concluyo mi exposición del proyecto Mi Gym. Agradezco la atención prestada por los miembros del tribunal y quedo a su entera disposición para cualquier pregunta o para realizar una demostración práctica del sistema. Muchas gracias.'"
+        };
+
+        function mostrarSlide(n) {
+            if (n < 1) n = 1;
+            if (n > totalSlides) n = totalSlides;
+            currentSlide = n;
+
+            document.querySelectorAll(".slide-viewport").forEach((s, idx) => {
+                s.classList.remove("active");
+                if (idx + 1 === currentSlide) {
+                    s.classList.add("active");
+                }
+            });
+
+            document.getElementById("slideIndicator").textContent = `${currentSlide} / ${totalSlides}`;
+            document.getElementById("speakerNotesText").innerHTML = notasOrador[currentSlide] || "Sin notas para esta diapositiva.";
+        }
+
+        function siguienteSlide() {
+            if (currentSlide < totalSlides) {
+                mostrarSlide(currentSlide + 1);
+            }
+        }
+
+        function anteriorSlide() {
+            if (currentSlide > 1) {
+                mostrarSlide(currentSlide - 1);
+            }
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error al activar pantalla completa: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        function toggleNotes() {
+            let body = document.getElementById("speakerNotesBody");
+            let icon = document.getElementById("notesToggleIcon");
+            if (body.style.display === "none") {
+                body.style.display = "block";
+                icon.textContent = "▼ Ocultar";
+            } else {
+                body.style.display = "none";
+                icon.textContent = "▲ Mostrar";
+            }
+        }
+
+        // CONTROL POR TECLADO (FLECHAS IZQUIERDA / DERECHA, ESPACIO, TECLA F)
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+                e.preventDefault();
+                siguienteSlide();
+            } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+                e.preventDefault();
+                anteriorSlide();
+            } else if (e.key === "f" || e.key === "F") {
+                toggleFullScreen();
+            } else if (e.key === "Home") {
+                mostrarSlide(1);
+            } else if (e.key === "End") {
+                mostrarSlide(totalSlides);
+            }
+        });
+
+        // INICIALIZAR EN EL SLIDE 1
+        window.onload = function() {
+            mostrarSlide(1);
+        };
+    </script>
+</body>
+</html>
